@@ -1,5 +1,6 @@
 package com.example.tasca_avaluacio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class Country {
 
 
     @ManyToMany(mappedBy = "countries")
+    @JsonIgnore
     private List<Conflict> conflicts = new ArrayList<>();
 
     public Country() {}
