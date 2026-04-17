@@ -20,6 +20,7 @@ public class Conflict {
     @Enumerated(EnumType.STRING)
     private Status status; //ACTIVE, FROZEN, ENDED
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
 

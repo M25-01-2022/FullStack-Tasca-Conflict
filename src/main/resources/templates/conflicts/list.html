@@ -24,11 +24,11 @@
     </thead>
     <tbody>
     <tr th:each="conflict : ${conflicts}">
-        <td th:text="${conflict.name}">Nombre</td>
-        <td th:text="${#temporals.format(conflict.startdate, 'dd/MM/yyyy')}"></td>
-        <td th:text="${conflict.status}">Estado</td>
-        <td th:text="${conflict.description}">Descripción</td>
-        <td th:text="${conflict.countries != null ? T(java.lang.String).join(', ', conflict.countries) : 'N/A'}">Países</td>
+        <td th:text="${conflict.name}"/>
+        <td th:text="${#temporals.format(conflict.startdate, 'dd/MM/yyyy')}"/>
+        <td th:text="${conflict.status}"/>
+        <td th:text="${conflict.description}"/>
+        <td th:text="${conflict.countries != null ? T(java.lang.String).join(', ', conflict.countries) : 'N/A'}"/>
     </tr>
     </tbody>
 </table>
