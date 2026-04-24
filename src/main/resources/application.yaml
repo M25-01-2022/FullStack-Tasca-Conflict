@@ -3,6 +3,10 @@ spring:
     name: tasca-avaluacio
 
   datasource:
+    hikari:
+      maximum-pool-size: 5
+      data-source-properties:
+        prepareThreshold: 0
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASS}
@@ -10,13 +14,13 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
       encoding: UTF-8
 
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:

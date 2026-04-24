@@ -20,12 +20,19 @@ public class ConflictController {
     // Da todos los conflictos
     @GetMapping
     public List<ConflictDTO> getAll(@RequestParam(required = false) String status) {
+        List<ConflictDTO> conflicts = conflictService.getAllConflicts();
+
+        if (conflicts == null){
+            return List.of();
+        }
+
         if (status != null) {
-            return conflictService.getAllConflicts().stream()
-                    .filter(c -> c.getStatus().equalsIgnoreCase(status))
+            return conflicts.stream()
+                    .filter(c -> c.getStatus() != null &&
+                            c.getStatus().equalsIgnoreCase(status))
                     .toList();
         }
-        return conflictService.getAllConflicts();
+        return conflicts;
     }
 
     // Regresa un conflicto específico por su ID
