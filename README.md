@@ -1,54 +1,132 @@
-Tasca Avaluacio - Gestió de Conflictes
+# Fullstack App - Conflictes entre països
 
-Descripció del projecte
-Aquest projecte és una aplicació Spring Boot que gestiona conflictes internacionals.  
-Inclou les següents funcionalitats:
+Aplicació fullstack per a la gestió de conflictes i països desenvolupada amb:
+- Frontend: Vue 3 + Vite + Pinia
+- Backend: Spring Boot (Java)
+- Base de dades: PostgreSQL (Supabase)
+- Deploy Frontend: Vercel
+- Deploy Backend: Railway
+---
+# Demo en producció
 
-- CRUD complet per a Conflites.
-- CRUD per a Faction i Event.
-- Endpoints avançats per filtrar conflictes per estat o per país.
+## Frontend (Vercel)
+https://frontend-conflict.vercel.app
 
-L'aplicació utilitza una base de dades H2 en memòria, i les entitats principals són: `Conflict`, `Country`, `Faction` i `Event`.
+## Backend API (Railway)
+https://fullstack-tasca-conflict-production-198b.up.railway.app
+
+---
+# Arquitectura del sistema
+    Vue 3 (Vercel)
+
+↓ HTTP REST API
+
+    Spring Boot (Railway)
+
+↓
+
+    PostgreSQL (Supabase)
+
+
+El frontend consumeix una API REST desplegada al núvol que es connecta a una base de dades PostgreSQL externa.
+
+---
+# Tecnologies utilitzades
+
+## Frontend
+- Vue 3
+- Vite
+- Pinia (state management)
+- Vercel (deploy)
+
+## Backend
+- Spring Boot
+- Hibernate
+- PostgreSQL Driver
+- Railway (deploy)
+
+## Base de dades
+- Supabase PostgreSQL
 
 ---
 
-Com compilar i executar l'aplicació
+# Variables d'entorn
 
-Requisits previs
-- Java 17 o superior
-- Maven 3.x
-- IDE com IntelliJ, Eclipse o VSCode
+## Backend (Spring Boot)
 
-Compilar i executar
-1. Clonar el repositori:
-   
-   git clone <URL_DEL_REPOSITORI>
-   cd tasca_avaluacio
-   
-2. Compilar el projecte
+Configurades a Railway:
 
-   mvn clean install
-   
-3. Executar l'aplicació
+DB_URL= jdbc:postgresql://aws-1-eu-central-1.pooler.supabase.com:5432/postgres
 
-   mvn spring-boot:run
+DB_USER= postgres.oyducviclwpmpzlsckif
 
-   (La aplicació s'executarà com https://localhost:8080)
-   
-4. Com accedir a la base de dades H2?:
+DB_PASS= proyecto_Fullstack
 
-   URL: http://localhost:8080/h2-console
+El fitxer 'application.yaml' utilitza:
 
-   JDBC URL: jdbc:h2:mem:testdb
+```yaml
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASS}
 
-   User: dam
-
-   Password: (deixar en blanc)
-
+```
 ---
+# Frontend (Vue 3 + Vite)
+Local (.env.local)
+VITE_API_URL = http://localhost:8080
 
-Exemples d'us dels endpoints principals amb Bruno (https://www.usebruno.com/)
+## Producció (Vercel)
 
-https://github.com/user-attachments/assets/40b76c37-2991-4da3-9041-228b6d5ca6aa
+Configurat a:
+
+Vercel Dashboard -> Project -> Settings -> Environment Variables
+
+VITE_API_URL=https://fullstack-tasca-conflict-production-198b.up.railway.app
+ 
+## CORS (Backend)
+
+Per permetre la comunicació entre frontend i backend en producció, s’ha configurat CORS a Spring Boot:
+
+    registry.addMapping("/api/**")
+        .allowedOrigins("http://localhost:5173",
+            "https://fullstack-tasca-conflict-production-198b.up.railway.app/",
+            "https://frontend-conflict.vercel.app")
+        .allowedMethods("GET", "POST", "PUT", "DELETE")
+        .allowCredentials(true);
+
+## Configuració SPA Routing (Vercel)
+
+Per evitar errors 404 en refrescar rutes del frontend (Vue Router), s’ha afegit:
+
+### vercel.json
+    {
+        "rewrites": [
+            { "source": "/(.*)",
+            "destination": "/index.html" }
+        ]
+    }
+
+## Problemes trobats i solucions
+### 1. Error de connexió a la base de dades
+_Error_: Tenant or user not found
+
+**Causa**: Credencials no configurades correctament al backend.
+
+_Solució_: S’han configurat correctament les variables al Railway per evitar hardcoding.
+
+### 2. Error CORS entre frontend i backend
+
+~~Error~~: Blocked by CORS policy: No 'Access-Control-Allow-Origin'
+
+**Causa**: No configurat els permisos del Frontend al Spring Boot.
+
+_Solució_: Configuració de CORS a Spring Boot per permetre el domini de Vercel.
+
+### 3. URL duplicada en peticions API
+~~Problema~~: /api/v1/conflicts/api/v1/conflicts
+
+_Solució_: Correcció de constants API_URL als stores de Pinia.
 
 
