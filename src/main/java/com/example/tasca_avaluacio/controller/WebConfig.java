@@ -14,7 +14,8 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins("http://localhost:5173",
-                                "fullstack-tasca-conflict-production-198b.up.railway.app")
+                                "https://fullstack-tasca-conflict-production-198b.up.railway.app/",
+                                "https://frontend-conflict.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowCredentials(true);
             }
